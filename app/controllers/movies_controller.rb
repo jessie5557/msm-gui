@@ -44,6 +44,30 @@ class MoviesController < ApplicationController
   end
 
 
+  def modify
+    #Get the ID out of params
+    the_id = params.fetch("an_id")
+
+    #Look up the existing record
+    matching_movie_record = Movie.where({:id => the_id})
+    the_movie = matching_movie_record.at(0)
+
+    #Overwrite each column with the values from user inputs
+    the_movie.title = params.fetch("the_title")
+    the_movie.year = params.fetch("the_year")
+    the_movie.duration = params.fetch("the_duration")
+    the_movie.description = params.fetch("the_description")
+    the_movie.image = params.fetch("the_image")
+    the_movie.director_id = params.fetch("the_director_id")
+
+    #Save
+    the_movie.save
+
+    redirect_to("/movies/#{the_movie.id}")
+  
+  end
+
+
   def index
     matching_movies = Movie.all
     @list_of_movies = matching_movies.order({ :created_at => :desc })
